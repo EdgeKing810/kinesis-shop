@@ -1,19 +1,34 @@
 {
-  "name": "template",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@edgeking810/create-react-app",
+  "version": "1.0.0",
+  "description": "Simple starter code for a React + Tailwind project.",
+  "homepage": "/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
     "@testing-library/user-event": "^12.2.2",
+    "axios": "^0.21.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "tailwindcss": "^1.9.6",
     "web-vitals": "^0.2.4"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EdgeKing810/react-template"
+  },
+  "main": "index.js",
+  "bin": {
+    "create-react-app": "./install.js"
+  },
+  "author": "Kishan Takoordyal <kihan@kinesis.games> (https://hub.kinesis.games)",
+  "license": "MIT",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build:css": "npx tailwindcss build public/tailwind.css -o public/styles.css",
+    "start": "npm run build:css && react-scripts start",
+    "build": "npm run build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
