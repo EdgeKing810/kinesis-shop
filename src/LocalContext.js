@@ -16,13 +16,14 @@ function LocalContextProvider({ children }) {
   const settings = {
     customPaging: function (i) {
       return (
-        <div className="w-6 h-1 bg-gray-500 p-1 flex items-center justify-center sm:-mt-6 -mt-4"></div>
+        <div className="w-6 h-1 bg-gray-500 p-1 flex items-center justify-center -mt-6"></div>
       );
     },
     useTransform: true,
     dots: true,
     dotsClass: 'slick-dots slick-thumb',
     infinite: true,
+    arrows: false,
     speed: 1500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -32,6 +33,14 @@ function LocalContextProvider({ children }) {
     cssEase: 'ease-out',
     centerMode: true,
     centerPadding: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          arrows: false,
+        },
+      },
+    ],
   };
 
   useEffect(() => {
