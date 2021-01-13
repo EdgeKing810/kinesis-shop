@@ -196,7 +196,7 @@ export default function Product() {
                   />
 
                   <button
-                    className={`sm:w-1/3 sm:mb-8 uppercase border-gray-800 ${
+                    className={`sm:w-1/3 sm:mb-8 sm:mt-0 mt-2 uppercase border-gray-800 ${
                       review.length > 0
                         ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-gray-800 focus:text-gray-800'
                         : 'opacity-50'
