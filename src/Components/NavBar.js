@@ -20,7 +20,7 @@ export default function NavBar() {
           />
 
           <button
-            className={`sm:px-2 sm:py-4 p-2 sm:w-auto w-2/3 box-content border-2 border-green-300 ${
+            className={`sm:p-4 p-2 sm:w-auto w-2/3 box-content border-2 border-green-300 ${
               search.length > 0
                 ? 'hover:bg-green-300 focus:bg-green-300 hover:text-green-900 focus:text-green-900'
                 : 'opacity-75'
@@ -32,12 +32,12 @@ export default function NavBar() {
       </div>
 
       <div className="flex h-full sm:w-auto w-5/6 items-center sm:justify-auto justify-between sm:my-0 mb-2 mt-4">
-        <button className="flex items-center font-bold text-gray-300 hover:text-green-300 focus:text-green-300 tracking-wide sm:text-lg uppercase mr-4">
+        <button className="flex items-center font-bold text-gray-300 hover:text-gray-100 focus:text-gray-100 tracking-wide sm:text-lg uppercase mr-4">
           <span className="ri-shopping-cart-2-fill mr-1"></span>
           Cart
         </button>
 
-        <button className="flex items-center font-bold text-gray-300 hover:text-green-300 focus:text-green-300 tracking-wide sm:text-lg uppercase">
+        <button className="flex items-center font-bold text-gray-300 hover:text-gray-100 focus:text-gray-100 tracking-wide sm:text-lg uppercase">
           <span className="ri-user-3-fill mr-1"></span>
           Sign in
         </button>

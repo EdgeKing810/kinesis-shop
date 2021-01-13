@@ -1,7 +1,7 @@
 {
-  "name": "@edgeking810/create-react-app",
+  "name": "kinesis_shop",
   "version": "1.0.0",
-  "description": "Simple starter code for a React + Tailwind project.",
+  "description": "A complete demo e-commerce platform.",
   "homepage": "/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
@@ -14,10 +14,6 @@
     "react-scripts": "4.0.0",
     "tailwindcss": "^1.9.6",
     "web-vitals": "^0.2.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/EdgeKing810/react-template"
   },
   "main": "index.js",
   "bin": {
