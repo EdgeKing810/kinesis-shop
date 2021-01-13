@@ -13,6 +13,27 @@ function LocalContextProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
 
+  const settings = {
+    customPaging: function (i) {
+      return (
+        <div className="w-6 h-1 bg-gray-500 p-1 flex items-center justify-center sm:-mt-6 -mt-4"></div>
+      );
+    },
+    useTransform: true,
+    dots: true,
+    dotsClass: 'slick-dots slick-thumb',
+    infinite: true,
+    speed: 1500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 2000,
+    autoplaySpeed: 3000,
+    cssEase: 'ease-out',
+    centerMode: true,
+    centerPadding: 0,
+  };
+
   useEffect(() => {
     if (localStorage.getItem('_userData')) {
       if (loggedInUser.jwt !== undefined && loggedInUser.jwt) {
@@ -97,6 +118,7 @@ function LocalContextProvider({ children }) {
         setProducts,
         orders,
         setOrders,
+        settings,
       }}
     >
       {children}

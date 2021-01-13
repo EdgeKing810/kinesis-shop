@@ -32,12 +32,12 @@ export default function NavBar() {
       </div>
 
       <div className="flex h-full sm:w-auto w-5/6 items-center sm:justify-auto justify-between sm:my-0 mb-2 mt-4">
-        <button className="flex items-center font-bold text-gray-300 hover:text-gray-100 focus:text-gray-100 tracking-wide sm:text-lg uppercase mr-4">
+        <button className="flex items-center font-bold text-gray-300 hover:text-white focus:text-white tracking-wide sm:text-lg uppercase mr-4">
           <span className="ri-shopping-cart-2-fill mr-1"></span>
           Cart
         </button>
 
-        <button className="flex items-center font-bold text-gray-300 hover:text-gray-100 focus:text-gray-100 tracking-wide sm:text-lg uppercase">
+        <button className="flex items-center font-bold text-gray-300 hover:text-white focus:text-white tracking-wide sm:text-lg uppercase">
           <span className="ri-user-3-fill mr-1"></span>
           Sign in
         </button>
