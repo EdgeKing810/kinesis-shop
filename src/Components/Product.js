@@ -218,7 +218,7 @@ export default function Product() {
             <div className="sm:w-1/4 w-11/12 sm:h-40 flex flex-col">
               <div className="bg-gray-300 sm:pt-0 pt-1 sm:mt-0 mt-4"></div>
 
-              <div className="text-gray-800 tracking-wide sm:text-3xl text-xl sm:mt-0 mt-2">
+              <div className="text-gray-800 tracking-wide sm:text-3xl text-xl sm:mt-0 mt-4">
                 {currentProduct.name}
               </div>
 
