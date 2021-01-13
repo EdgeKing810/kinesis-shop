@@ -12,8 +12,10 @@ export default function Product() {
   const [color, setColor] = useState('blue');
 
   const [limit, setLimit] = useState(3);
-
   const [amount, setAmount] = useState(0);
+
+  const [review, setReview] = useState('');
+  const [rating, setRating] = useState(0);
 
   const history = useHistory();
   const { productID } = useParams();
@@ -78,7 +80,7 @@ export default function Product() {
           <div className="w-full flex sm:flex-row flex-col sm:justify-around sm:items-start items-center mt-4">
             <div className="sm:w-1/4 w-11/12 flex flex-col">
               <button
-                className="sm:w-1/3 mb-4 uppercase border-gray-800 hover:bg-gray-800 focus:bg-gray-800 border-2 border-gray-800 text-gray-800 hover:text-gray-300 sm:text-lg text-base"
+                className="sm:w-1/3 mb-4 uppercase border-gray-800 hover:bg-gray-800 focus:bg-gray-800 border-2 border-gray-800 text-gray-800 hover:text-gray-300 focus:text-gray-300 sm:text-lg text-base"
                 onClick={() => history.goBack()}
               >
                 Go back
@@ -167,7 +169,45 @@ export default function Product() {
               </div>
 
               {loggedInUser.username && loggedInUser.username !== undefined ? (
-                <div className=""></div>
+                <div className="w-full flex flex-col">
+                  <div className="w-full text-left sm:text-lg text-base text-gray-600 tracking-wide font-bold mt-2">
+                    Rating
+                  </div>
+                  <div className="w-full flex items-center">
+                    <ReactStars
+                      count={5}
+                      size={24}
+                      edit={true}
+                      value={rating}
+                      onChange={(e) => setRating(e)}
+                      activeColor="#ffd700"
+                    />
+                  </div>
+
+                  <div className="w-full text-left sm:text-lg text-base text-gray-600 tracking-wide font-bold mt-4">
+                    Comment
+                  </div>
+                  <textarea
+                    title="review"
+                    className="border-2 border-gray-300 p-2 placeholder-gray-500 text-gray-700 sm:text-sm text-xs mt-2"
+                    style={{ minHeight: '5em' }}
+                    value={review}
+                    onChange={(e) => setReview(e.target.value)}
+                  />
+
+                  <button
+                    className={`sm:w-1/3 sm:mb-8 uppercase border-gray-800 ${
+                      review.length > 0
+                        ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-gray-800 focus:text-gray-800'
+                        : 'opacity-50'
+                    } border-2 border-gray-800 text-gray-300 bg-gray-800 sm:text-lg text-base p-2`}
+                    onClick={() => {
+                      if (review.length > 0) console.log('Submit Review');
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
               ) : (
                 <div className="py-2 bg-blue-300 text-gray-900 sm:text-lg text-base mt-4 text-center opacity-75">
                   Please sign it to write a review
@@ -254,7 +294,7 @@ export default function Product() {
                   <div className="sm:w-1/2 w-1/3 font-bold text-gray-700 ml-2">
                     Quantity:
                   </div>
-                  <div className="text-gray-700 sm:w-1/2 w-2/3 mr-2 border-2 border-gray-500">
+                  <div className="text-gray-700 sm:w-1/2 w-2/3 mr-2">
                     <Select
                       options={options}
                       onChange={(e) => setAmount(parseInt(e.value))}
