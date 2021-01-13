@@ -104,7 +104,7 @@ export default function Home() {
                         value={
                           pr.reviews && pr.reviews !== undefined
                             ? pr.reviews
-                                .map((r) => r.rating)
+                                .map((r) => parseFloat(r.rating))
                                 .reduce((acc, rat) => acc + rat, 0) /
                               pr.reviews.length
                             : 0
@@ -128,7 +128,7 @@ export default function Home() {
           {limit < products.length && (
             <div className="w-11/12 flex justify-end mb-4">
               <button
-                className="sm:text-xl text-lg text-gray-700 hover:text-green-500 focus:text-green-500 font-bold underline"
+                className="sm:text-xl text-lg text-gray-700 :no-underline focus:no-underline font-bold underline"
                 onClick={() => setLimit((prev) => prev + 5)}
               >
                 Show more

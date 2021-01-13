@@ -11,12 +11,14 @@ export default function Product() {
   const [error, setError] = useState('Fetching product info...');
   const [color, setColor] = useState('blue');
 
+  const [limit, setLimit] = useState(3);
+
   const [amount, setAmount] = useState(0);
 
   const history = useHistory();
   const { productID } = useParams();
 
-  const { UPLOADSURL, loggedInUser, products, settings } = useContext(
+  const { UPLOADSURL, loggedInUser, products, users, settings } = useContext(
     LocalContext
   );
 
@@ -40,11 +42,25 @@ export default function Product() {
     // eslint-disable-next-line
   }, []);
 
-  const tmp = Array.from({ length: currentProduct.amount }, (_, i) =>
+  const options = Array.from({ length: currentProduct.amount }, (_, i) =>
     (i + 1).toString()
   ).map((e) => {
     return { value: e, label: e };
   });
+
+  const convertDate = (date) => {
+    const oldDate = new Date(date);
+    return new Date(
+      Date.UTC(
+        oldDate.getFullYear(),
+        oldDate.getMonth(),
+        oldDate.getDate(),
+        oldDate.getHours(),
+        oldDate.getMinutes(),
+        oldDate.getSeconds()
+      )
+    ).toString();
+  };
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -84,11 +100,62 @@ export default function Product() {
               </Slider>
 
               <div className="w-11/12 text-left uppercase sm:text-2xl text-lg text-gray-800 tracking-wide font-bold sm:mt-8 mt-2">
-                Reviews
+                Reviews{' '}
+                {`(${
+                  currentProduct.reviews ? currentProduct.reviews.length : 0
+                })`}
               </div>
 
               {currentProduct.reviews && currentProduct.reviews.length > 0 ? (
-                <div className="w-full flex flex-col"></div>
+                <div className="w-full flex flex-col mt-2">
+                  {currentProduct.reviews.slice(0, limit).map((review, i) => (
+                    <div
+                      className="w-full flex flex-col"
+                      key={`review-${review.reviewID}`}
+                    >
+                      <div className="w-full sm:text-base text-sm">
+                        {users.find((u) => u.uid === review.uid).name}
+                      </div>
+
+                      <div className="w-full sm:text-sm text-xs">
+                        Posted on{' '}
+                        {convertDate(review.date)
+                          .split(' ')
+                          .slice(0, 4)
+                          .join(' ')}
+                      </div>
+
+                      <div className="w-full flex items-center">
+                        <ReactStars
+                          count={5}
+                          size={24}
+                          edit={false}
+                          value={parseFloat(review.rating)}
+                          activeColor="#ffd700"
+                        />
+                      </div>
+
+                      <div className="w-full sm:text-sm text-xs">
+                        {review.review}
+                      </div>
+
+                      {i < currentProduct.reviews.length - 1 && (
+                        <div className="bg-gray-300 pt-1 my-2"></div>
+                      )}
+                    </div>
+                  ))}
+
+                  {limit < currentProduct.reviews.length && (
+                    <div className="w-full flex justify-end mb-4">
+                      <button
+                        className="sm:text-lg text-base text-gray-700 hover:no-underline focus:no-underline font-bold underline"
+                        onClick={() => setLimit((prev) => prev + 3)}
+                      >
+                        Show more reviews
+                      </button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="py-2 bg-blue-300 text-gray-900 sm:text-lg text-base mt-4 text-center opacity-75">
                   No Reviews yet
@@ -187,9 +254,9 @@ export default function Product() {
                   <div className="sm:w-1/2 w-1/3 font-bold text-gray-700 ml-2">
                     Quantity:
                   </div>
-                  <div className="text-gray-700 sm:w-1;2 w-2/3 mr-2 border-2 border-gray-500">
+                  <div className="text-gray-700 sm:w-1/2 w-2/3 mr-2 border-2 border-gray-500">
                     <Select
-                      options={tmp}
+                      options={options}
                       onChange={(e) => setAmount(parseInt(e.value))}
                     />
                   </div>
