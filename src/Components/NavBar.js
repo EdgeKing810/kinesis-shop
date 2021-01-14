@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { LocalContext } from '../LocalContext';
 
 export default function NavBar() {
   const [search, setSearch] = useState('');
 
+  const { loggedInUser } = useContext(LocalContext);
+
+  const history = useHistory();
+
   return (
     <div className="w-full sm:px-20 sm:py-8 bg-gray-800 flex sm:flex-row flex-col justify-between items-center">
       <div className="flex sm:flex-row flex-col h-full items-center sm:w-auto w-full">
-        <div className="uppercase text-gray-300 font-open tracking-wide sm:text-2xl text-xl font-bold sm:mr-8 sm:my-0 my-4">
+        <button
+          className="uppercase text-gray-300 font-open tracking-wide sm:text-2xl text-xl font-bold sm:mr-8 sm:my-0 my-4"
+          onClick={() => history.push('/')}
+        >
           Kinesis Shop
-        </div>
+        </button>
 
         <div className="sm:h-full flex sm:flex-row flex-col items-center sm:w-auto w-full">
           <input
@@ -32,14 +42,26 @@ export default function NavBar() {
       </div>
 
       <div className="flex h-full sm:w-auto w-5/6 items-center sm:justify-auto justify-between sm:my-0 mb-2 mt-4">
-        <button className="flex items-center font-bold text-gray-300 hover:text-white focus:text-white tracking-wide sm:text-lg uppercase mr-4">
+        <button
+          className="flex items-center font-bold text-gray-300 hover:text-white focus:text-white tracking-wide sm:text-lg uppercase mr-4"
+          onClick={() => history.push('/cart')}
+        >
           <span className="ri-shopping-cart-2-fill mr-1"></span>
           Cart
         </button>
 
-        <button className="flex items-center font-bold text-gray-300 hover:text-white focus:text-white tracking-wide sm:text-lg uppercase">
+        <button
+          className="flex items-center font-bold text-gray-300 hover:text-white focus:text-white tracking-wide sm:text-lg uppercase"
+          onClick={() =>
+            loggedInUser.uid && loggedInUser.uid !== undefined
+              ? history.push('/profile')
+              : history.push('/sign-in')
+          }
+        >
           <span className="ri-user-3-fill mr-1"></span>
-          Sign in
+          {loggedInUser.uid && loggedInUser.uid !== undefined
+            ? 'Profile'
+            : 'Sign in'}
         </button>
       </div>
     </div>

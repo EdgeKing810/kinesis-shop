@@ -167,6 +167,8 @@ function LocalContextProvider({ children }) {
         profileID: uid,
       };
 
+      setLoggedInUser({ uid: data.uid });
+
       axios
         .post(`${APIURL}/api/shop/products`, data, {
           headers: { Authorization: `Bearer ${jwt}` },

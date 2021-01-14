@@ -4,6 +4,7 @@ import { Redirect, Switch, Route } from 'react-router-dom';
 import NavBar from './Components/NavBar';
 import Home from './Components/Home';
 import Product from './Components/Product';
+import Login from './Components/Login';
 
 export default function App() {
   return (
@@ -19,6 +20,10 @@ export default function App() {
 
             <Route exact path="/product/:productID">
               <Product />
+            </Route>
+
+            <Route exact path="/sign-in">
+              <Login />
             </Route>
 
             <Route render={() => <Redirect to="/" />} />

@@ -160,7 +160,7 @@ export default function Product() {
                 </div>
               ) : (
                 <div className="py-2 bg-blue-300 text-gray-900 sm:text-lg text-base mt-4 text-center opacity-75">
-                  No Reviews yet
+                  No reviews yet
                 </div>
               )}
 
@@ -168,7 +168,7 @@ export default function Product() {
                 Write a customer review
               </div>
 
-              {loggedInUser.username && loggedInUser.username !== undefined ? (
+              {loggedInUser.uid && loggedInUser.uidyy !== undefined ? (
                 <div className="w-full flex flex-col">
                   <div className="w-full text-left sm:text-lg text-base text-gray-600 tracking-wide font-bold mt-2">
                     Rating
