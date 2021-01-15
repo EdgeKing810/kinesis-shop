@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router-dom';
 
 import { LocalContext } from '../LocalContext';
@@ -30,6 +31,8 @@ export default function Profile() {
   const [postalCode, setPostalCode] = useState(
     loggedInUser.address ? loggedInUser.address.postal_code : ''
   );
+
+  const alert = useAlert();
 
   const currentUser =
     loggedInUser.uid && loggedInUser.uid !== undefined
@@ -162,7 +165,7 @@ export default function Profile() {
             ? updateInfo()
             : postalCode.length < 5
             ? alert.error('Postal Code is invalid!')
-            : alert.error('No fieds should be empty!')
+            : alert.error('No fields should be empty!')
         }
       >
         Update
