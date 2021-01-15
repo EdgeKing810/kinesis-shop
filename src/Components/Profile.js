@@ -18,6 +18,7 @@ export default function Profile() {
     APIURL,
     loggedInUser,
     setLoggedInUser,
+    products,
     users,
     setOrders,
   } = useContext(LocalContext);
@@ -228,6 +229,39 @@ export default function Profile() {
     </div>
   );
 
+  const productsTable = (
+    <div className="w-full p-4 flex flex-col sm:items-start items-center">
+      <div className="sm:text-3xl text-xl text-gray-900 font-semibold tracking-wide">
+        Products
+      </div>
+
+      {products && products.length > 0 ? (
+        <table className="table-fixed w-full">
+          <tbody>
+            <tr>
+              <td className="uppercase p-2 text-gray-800 border w-1/4">id</td>
+              <td className="uppercase p-2 text-gray-800 border w-1/3">Name</td>
+              <td className="uppercase p-2 text-gray-800 border w-1/10">
+                Price
+              </td>
+              <td className="uppercase p-2 text-gray-800 border w-1/10">
+                Category
+              </td>
+              <td className="uppercase p-2 text-gray-800 border w-1/10">
+                Brand
+              </td>
+              <td className="uppercase p-2 text-gray-800 border w-1/10"></td>
+            </tr>
+          </tbody>
+        </table>
+      ) : (
+        <div className="w-full py-4 bg-gray-400 text-gray-900 sm:text-lg text-base text-center opacity-75">
+          No products created yet.
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="w-full flex flex-col items-center">
       {error ? (
@@ -296,7 +330,7 @@ export default function Profile() {
           </div>
 
           <div className="sm:w-4/5 w-full flex flex-col items-center border-2 border-gray-500 sm:mt-0 mt-2">
-            {userInformation}
+            {selected === 'info' ? userInformation : productsTable}
           </div>
         </div>
       )}
