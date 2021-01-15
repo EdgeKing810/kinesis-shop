@@ -80,7 +80,7 @@ export default function Home() {
                 <button
                   className="sm:h-80 h-56 m-1 border-2 border-gray-400 p-2 hover:border-green-300 focus:border-green-300"
                   key={`card-${i}`}
-                  onClick={() => history.push(`/products/${pr.productID}`)}
+                  onClick={() => history.push(`/product/${pr.productID}`)}
                 >
                   <div className="w-full h-2/3 flex items-center justify-center">
                     <img

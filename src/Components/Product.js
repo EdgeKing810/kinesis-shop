@@ -80,7 +80,7 @@ export default function Product() {
           <div className="w-full flex sm:flex-row flex-col sm:justify-around sm:items-start items-center mt-4">
             <div className="sm:w-1/4 w-11/12 flex flex-col">
               <button
-                className="sm:w-1/3 mb-4 uppercase border-gray-800 hover:bg-gray-800 focus:bg-gray-800 border-2 border-gray-800 text-gray-800 hover:text-gray-300 focus:text-gray-300 sm:text-lg text-base"
+                className="sm:w-1/3 mb-4 uppercase border-gray-800 hover:bg-gray-800 focus:bg-gray-800 border-2 text-gray-800 hover:text-gray-300 focus:text-gray-300 sm:text-lg text-base"
                 onClick={() => history.goBack()}
               >
                 Go back

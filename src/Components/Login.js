@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import axios from 'axios';
@@ -8,6 +8,7 @@ import { LocalContext } from '../LocalContext';
 export default function Login() {
   const {
     APIURL,
+    loggedInUser,
     setLoggedInUser,
     setUsers,
     setProducts,
@@ -21,6 +22,12 @@ export default function Login() {
   const [color, setColor] = useState('blue');
 
   const history = useHistory();
+
+  useEffect(() => {
+    if (loggedInUser.uid && loggedInUser.uid !== undefined) {
+      history.push('/');
+    }
+  }, []);
 
   const submitForm = (e) => {
     e.preventDefault();

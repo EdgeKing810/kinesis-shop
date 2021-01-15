@@ -9,11 +9,9 @@ function LocalContextProvider({ children }) {
   const UPLOADSURL = 'https://uploads.connect.kinesis.games';
 
   const [loggedInUser, setLoggedInUser] = useState({});
-  const [uusers, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [pproducts, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-
-  const users = [{ uid: '1', name: 'Kishan' }];
 
   const products = [
     {
@@ -135,7 +133,6 @@ function LocalContextProvider({ children }) {
     dotsClass: 'slick-dots slick-thumb',
     infinite: true,
     arrows: false,
-    speed: 1500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,

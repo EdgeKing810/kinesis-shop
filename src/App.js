@@ -5,6 +5,7 @@ import NavBar from './Components/NavBar';
 import Home from './Components/Home';
 import Product from './Components/Product';
 import Login from './Components/Login';
+import Profile from './Components/Profile';
 
 export default function App() {
   return (
@@ -24,6 +25,10 @@ export default function App() {
 
             <Route exact path="/sign-in">
               <Login />
+            </Route>
+
+            <Route exact path="/profile">
+              <Profile />
             </Route>
 
             <Route render={() => <Redirect to="/" />} />

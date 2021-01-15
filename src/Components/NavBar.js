@@ -60,7 +60,7 @@ export default function NavBar() {
         >
           <span className="ri-user-3-fill mr-1"></span>
           {loggedInUser.uid && loggedInUser.uid !== undefined
-            ? 'Profile'
+            ? 'User Interface'
             : 'Sign in'}
         </button>
       </div>
