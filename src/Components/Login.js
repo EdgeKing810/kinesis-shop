@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { useAlert } from 'react-alert';
 import axios from 'axios';
 
 import { LocalContext } from '../LocalContext';
@@ -22,6 +23,8 @@ export default function Login() {
   const [color, setColor] = useState('blue');
 
   const history = useHistory();
+
+  const alert = useAlert();
 
   useEffect(() => {
     if (loggedInUser.uid && loggedInUser.uid !== undefined) {
@@ -45,8 +48,6 @@ export default function Login() {
         setColor('red');
         setError(res.data.message);
 
-        setLoggedInUser(res.data);
-
         setTimeout(() => {
           setUsername('');
           setPassword('');
@@ -63,6 +64,8 @@ export default function Login() {
             jwt: res.data.jwt,
           })
         );
+
+        setLoggedInUser(res.data);
 
         setTimeout(() => {
           setUsername('');
@@ -167,7 +170,7 @@ export default function Login() {
                   : 'opacity-75'
               } border-2 border-gray-800 text-gray-800 sm:text-lg text-base`}
             >
-              Submit
+              Sign in
             </button>
           </form>
         )}

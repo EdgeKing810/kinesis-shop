@@ -164,7 +164,7 @@ function LocalContextProvider({ children }) {
         profileID: uid,
       };
 
-      setLoggedInUser({ uid: data.uid });
+      setLoggedInUser({ uid: data.uid, jwt: jwt });
 
       axios
         .post(`${APIURL}/api/shop/products`, data, {

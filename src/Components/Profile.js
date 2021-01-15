@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react';
 import { useAlert } from 'react-alert';
 import { useHistory } from 'react-router-dom';
 
+import axios from 'axios';
+
 import { LocalContext } from '../LocalContext';
 
 export default function Profile() {
@@ -12,25 +14,13 @@ export default function Profile() {
 
   const history = useHistory();
 
-  const { loggedInUser, setLoggedInUser, users, setOrders } = useContext(
-    LocalContext
-  );
-
-  const [country, setCountry] = useState(
-    loggedInUser.address ? loggedInUser.address.country : ''
-  );
-  const [province, setProvince] = useState(
-    loggedInUser.state ? loggedInUser.address.state : ''
-  );
-  const [city, setCity] = useState(
-    loggedInUser.address ? loggedInUser.address.city : ''
-  );
-  const [address, setAddress] = useState(
-    loggedInUser.address ? loggedInUser.address.address : ''
-  );
-  const [postalCode, setPostalCode] = useState(
-    loggedInUser.address ? loggedInUser.address.postal_code : ''
-  );
+  const {
+    APIURL,
+    loggedInUser,
+    setLoggedInUser,
+    users,
+    setOrders,
+  } = useContext(LocalContext);
 
   const alert = useAlert();
 
@@ -38,6 +28,31 @@ export default function Profile() {
     loggedInUser.uid && loggedInUser.uid !== undefined
       ? users.find((u) => u.uid === loggedInUser.uid)
       : {};
+
+  const [country, setCountry] = useState(
+    currentUser && currentUser.address ? currentUser.address.country : ''
+  );
+  const [province, setProvince] = useState(
+    currentUser && currentUser.address ? currentUser.address.state : ''
+  );
+  const [city, setCity] = useState(
+    currentUser && currentUser.address ? currentUser.address.city : ''
+  );
+  const [address, setAddress] = useState(
+    currentUser && currentUser.address ? currentUser.address.address : ''
+  );
+  const [postalCode, setPostalCode] = useState(
+    currentUser && currentUser.address ? currentUser.address.postal_code : ''
+  );
+  const [number, setNumber] = useState(
+    currentUser && currentUser.address ? currentUser.address.number : ''
+  );
+
+  const [preferredPayment] = useState(
+    currentUser && currentUser.preferred_payment
+      ? currentUser.preferred_payment
+      : 'PAYPAL'
+  );
 
   useState(() => {
     if (currentUser && currentUser.name) {
@@ -82,18 +97,40 @@ export default function Profile() {
       province.length > 0 &&
       city.length > 0 &&
       address.length > 0 &&
-      postalCode.length > 0
+      postalCode.length > 0 &&
+      number.length > 0
     );
   };
 
   const updateInfo = () => {
-    console.log('Updating...');
+    const data = {
+      uid: loggedInUser.uid,
+      country: country,
+      state: province,
+      city: city,
+      address: address,
+      postal_code: postalCode,
+      number: number,
+      preferred_payment: preferredPayment,
+    };
+
+    axios
+      .post(`${APIURL}/api/shop/user/update`, data, {
+        headers: { Authorization: `Bearer ${loggedInUser.jwt}` },
+      })
+      .then((res) => {
+        if (res.data.error === 0) {
+          alert.success('Successfully Updated!');
+        } else {
+          console.log(res.data);
+        }
+      });
   };
 
   const userInformation = (
-    <div className="w-full p-2 flex flex-col sm:items-start items-center">
+    <div className="w-full p-4 flex flex-col sm:items-start items-center">
       <div className="sm:text-3xl text-xl text-gray-900 font-semibold tracking-wide">
-        Edit shipping information
+        Edit information
       </div>
 
       <div className="w-full mt-2">
@@ -149,6 +186,24 @@ export default function Profile() {
               e.target.value.length === 0
             )
               setPostalCode(e.target.value);
+          }}
+          className="w-full mt-1 p-2 sm:text-base text-xs bg-gray-300 border-2 border-gray-300 hover:border-gray-500 focus:border-gray-500 text-gray-900"
+        />
+      </div>
+
+      <div className="w-full mt-2">
+        <div className="text-gray-800 sm:text-base text-sm">
+          Telephone / Mobile Number (include country code)
+        </div>
+        <input
+          title="number"
+          value={number}
+          onChange={(e) => {
+            if (
+              /^[+\d](?:.*\d)?$/.test(e.target.value) ||
+              e.target.value.length === 0
+            )
+              setNumber(e.target.value);
           }}
           className="w-full mt-1 p-2 sm:text-base text-xs bg-gray-300 border-2 border-gray-300 hover:border-gray-500 focus:border-gray-500 text-gray-900"
         />
