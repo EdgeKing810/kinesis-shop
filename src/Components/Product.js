@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import Select from 'react-select';
 import ReactStars from 'react-rating-stars-component';
+import { useAlert } from 'react-alert';
 
 import { LocalContext } from '../LocalContext';
 
@@ -19,6 +20,8 @@ export default function Product() {
 
   const history = useHistory();
   const { productID } = useParams();
+
+  const alert = useAlert();
 
   const { UPLOADSURL, loggedInUser, products, users, settings } = useContext(
     LocalContext
@@ -116,7 +119,10 @@ export default function Product() {
                       key={`review-${review.reviewID}`}
                     >
                       <div className="w-full sm:text-base text-sm">
-                        {users.find((u) => u.uid === review.uid).name}
+                        {users &&
+                          users.length > 0 &&
+                          users.find((u) => u.uid === review.uid) &&
+                          users.find((u) => u.uid === review.uid).name}
                       </div>
 
                       <div className="w-full sm:text-sm text-xs">
@@ -259,6 +265,12 @@ export default function Product() {
 
               <div className="bg-gray-300 pt-1"></div>
 
+              <div className="text-gray-700 tracking-wide sm:text-base text-sm font-bold my-2">
+                Category: {currentProduct.category}
+              </div>
+
+              <div className="bg-gray-300 pt-1"></div>
+
               <div className="text-gray-700 tracking-wide sm:text-sm text-xs mt-2">
                 {currentProduct.description}
               </div>
@@ -312,7 +324,11 @@ export default function Product() {
                         : 'opacity-75'
                     }`}
                     onClick={() => {
-                      if (amount > 0) console.log('Adding to cart');
+                      if (amount > 0) {
+                        console.log('Adding to cart');
+                      } else {
+                        alert.error('Select a quantity first.');
+                      }
                     }}
                   >
                     Add to cart

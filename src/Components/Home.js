@@ -17,21 +17,17 @@ export default function Home() {
   const { UPLOADSURL, products, settings } = useContext(LocalContext);
 
   useState(() => {
-    if (products && products.length > 0) {
-      setError('');
-      return;
-    }
-
     setTimeout(() => {
-      setError('No products yet');
+      setError('No products yet.');
       setColor('red');
     }, 1000);
+
     // eslint-disable-next-line
-  }, []);
+  }, [products]);
 
   return (
     <div className="w-full flex flex-col items-center">
-      {error && (
+      {error && (!products || products.length === 0) && (
         <div
           className={`w-11/12 py-4 bg-${color}-400 text-gray-900 sm:text-xl text-lg mt-4 text-center opacity-75`}
         >
