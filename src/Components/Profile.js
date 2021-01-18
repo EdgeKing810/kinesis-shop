@@ -25,6 +25,8 @@ export default function Profile() {
     products,
     setProducts,
     users,
+    setUsers,
+    orders,
     setOrders,
   } = useContext(LocalContext);
 
@@ -77,6 +79,20 @@ export default function Profile() {
       ? currentUser.preferred_payment
       : 'PAYPAL'
   );
+
+  const convertDate = (date) => {
+    const oldDate = new Date(date);
+    return new Date(
+      Date.UTC(
+        oldDate.getFullYear(),
+        oldDate.getMonth(),
+        oldDate.getDate(),
+        oldDate.getHours(),
+        oldDate.getMinutes(),
+        oldDate.getSeconds()
+      )
+    ).toString();
+  };
 
   useState(() => {
     if (currentUser && currentUser.name) {
@@ -259,6 +275,43 @@ export default function Profile() {
           );
         }
       });
+  };
+
+  const makeAdmin = (userID) => {
+    if (
+      window.confirm('Are you sure that you want this user to be an admin?')
+    ) {
+      const data = {
+        uid: loggedInUser.uid,
+        profileID: userID,
+      };
+
+      axios
+        .post(
+          `${APIURL}/api/shop/user/admin`,
+          { ...data },
+          { headers: { Authorization: `Bearer ${loggedInUser.jwt}` } }
+        )
+        .then((res) => {
+          if (res.data.error !== 0) {
+            console.log(res.data);
+          } else {
+            setUsers((prev) =>
+              prev.map((u) => {
+                if (u.uid === userID) {
+                  let updatedUser = { ...u };
+                  updatedUser.is_admin = true;
+                  return updatedUser;
+                } else {
+                  return u;
+                }
+              })
+            );
+
+            alert.success(`User is now an admin!`);
+          }
+        });
+    }
   };
 
   const userInformation = (
@@ -541,7 +594,12 @@ export default function Profile() {
                 {userProducts.map((pr, i) => (
                   <tr key={`pr-table-${i}`}>
                     <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/4">
-                      {pr.productID}
+                      <button
+                        className="w-full text-left underline hover:no-underline focus:no-underline"
+                        onClick={() => history.push(`/product/${pr.productID}`)}
+                      >
+                        {pr.productID}
+                      </button>
                     </td>
                     <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/3">
                       {pr.name}
@@ -557,7 +615,7 @@ export default function Profile() {
                     </td>
                     <td className="sm:text-base text-sm p-2 text-gray-800 border w-1/10 flex items-center justify-center">
                       <button
-                        className="ri-pencil-line sm:h-8 h-6 sm:w-8 w-6 bg-gray-300"
+                        className="ri-pencil-line sm:h-8 h-6 sm:w-8 w-6 bg-gray-300 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-300 focus:text-gray-300"
                         onClick={() => setIsEditingProduct(pr.productID)}
                       ></button>
                     </td>
@@ -570,6 +628,155 @@ export default function Profile() {
       ) : (
         <div className="w-full py-4 bg-gray-400 text-gray-900 sm:text-lg text-base text-center opacity-75">
           No products created yet.
+        </div>
+      )}
+    </div>
+  );
+
+  const usersTable = (
+    <div className="w-full p-4 flex flex-col sm:items-start items-center">
+      <div className="w-full flex justify-between items-center mb-2">
+        <div className="sm:text-3xl text-xl text-gray-900 font-semibold tracking-wide h-full flex items-center">
+          Users
+        </div>
+      </div>
+
+      {users && users.length > 0 && currentUser.is_admin ? (
+        <div className="w-full sm:overflow-x-hidden overflow-x-scroll">
+          <table className="table-auto w-full">
+            <tbody>
+              <tr>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/4">
+                  id
+                </td>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/3">
+                  Name
+                </td>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/10"></td>
+              </tr>
+              {users
+                .filter((u) => u.uid !== loggedInUser.uid)
+                .reverse()
+                .map((usr, i) => (
+                  <tr key={`usr-table-${i}`}>
+                    <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/4">
+                      {usr.uid}
+                    </td>
+                    <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/3">
+                      {usr.name}
+                    </td>
+
+                    <td className="sm:text-base text-sm p-2 text-gray-800 border w-1/10 flex items-center justify-center">
+                      {usr.is_admin ? (
+                        <div className="w-full h-full text-center font-bold uppercase text-blue-500">
+                          User is an admin
+                        </div>
+                      ) : (
+                        <button
+                          className="ri-admin-line sm:h-8 h-6 sm:w-8 w-6 bg-gray-300 hover:bg-gray-800 focus:bg-gray-800 hover:text-gray-300 focus:text-gray-300"
+                          title="Make user admin"
+                          onClick={() => makeAdmin(usr.uid)}
+                        ></button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="w-full py-4 bg-gray-400 text-gray-900 sm:text-lg text-base text-center opacity-75">
+          No users on the platform yet.
+        </div>
+      )}
+    </div>
+  );
+
+  let orderPrices = [];
+
+  orders.forEach((order) => {
+    let prices = order.products.map(
+      (product) =>
+        parseFloat(
+          products.find((p) => p.productID === product.productID).price
+        ) * product.amount
+    );
+    let totalPrice = prices.reduce((a, b) => a + b, 0) * order.taxPercentage;
+    orderPrices.push(totalPrice);
+  });
+
+  const ordersTable = (
+    <div className="w-full p-4 flex flex-col sm:items-start items-center">
+      <div className="w-full flex justify-between items-center mb-2">
+        <div className="sm:text-3xl text-xl text-gray-900 font-semibold tracking-wide h-full flex items-center">
+          Orders
+        </div>
+      </div>
+
+      {orders.length > 0 ? (
+        <div className="w-full sm:overflow-x-hidden overflow-x-scroll">
+          <table className="table-auto w-full">
+            <tbody>
+              <tr>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/4">
+                  id
+                </td>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/3">
+                  Date
+                </td>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/10">
+                  Paid
+                </td>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/10">
+                  Delivered
+                </td>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/10">
+                  Price
+                </td>
+                <td className="uppercase sm:text-lg text-xs p-2 text-gray-800 border w-1/10"></td>
+              </tr>
+              {orders.map((or, i) => (
+                <tr key={`order-table-${i}`}>
+                  <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/4">
+                    <button
+                      className="w-full text-left underline hover:no-underline focus:no-underline"
+                      onClick={() => history.push(`/order/${or.orderID}`)}
+                    >
+                      {or.orderID}
+                    </button>
+                  </td>
+                  <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/3">
+                    {convertDate(or.date)}
+                  </td>
+                  <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/10 font-bold">
+                    {or.is_paid.status ? (
+                      <span className="text-green-500">
+                        On {convertDate(or.is_paid.date)}
+                      </span>
+                    ) : (
+                      <span className="text-red-500">No</span>
+                    )}
+                  </td>
+                  <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/10 font-bold">
+                    {or.is_delivered.status ? (
+                      <span className="text-green-500">
+                        On {convertDate(or.is_delivered.date)}
+                      </span>
+                    ) : (
+                      <span className="text-red-500">No</span>
+                    )}
+                  </td>
+                  <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/10">
+                    ${orderPrices[i]}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="w-full py-4 bg-gray-400 text-gray-900 sm:text-lg text-base text-center opacity-75">
+          Nothing ordered yet.
         </div>
       )}
     </div>
@@ -643,7 +850,13 @@ export default function Profile() {
           </div>
 
           <div className="sm:w-4/5 w-full flex flex-col items-center border-2 border-gray-500 sm:mt-0 mt-2">
-            {selected === 'info' ? userInformation : productsTable}
+            {selected === 'info'
+              ? userInformation
+              : selected === 'products'
+              ? productsTable
+              : selected === 'orders'
+              ? ordersTable
+              : usersTable}
           </div>
         </div>
       )}
