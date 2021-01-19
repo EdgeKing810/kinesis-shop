@@ -28,6 +28,7 @@ export default function Profile() {
     setUsers,
     orders,
     setOrders,
+    setCart,
   } = useContext(LocalContext);
 
   const alert = useAlert();
@@ -112,6 +113,7 @@ export default function Profile() {
   const signOut = () => {
     setLoggedInUser({});
     setOrders([]);
+    setCart([]);
     localStorage.clear();
     history.push('/');
   };
