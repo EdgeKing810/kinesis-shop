@@ -159,7 +159,7 @@ export default function Product() {
             </div>
             <div className="my-4 flex items-center justify-center">
               <button
-                className={`p-2 bg-black border-2 border-black sm:text-lg text-sm text-gray-200 w-11/12 ${
+                className={`p-2 bg-black border-2 border-black sm:text-lg uppercase text-sm text-gray-200 w-11/12 ${
                   cartProducts && cartProducts.length > 0
                     ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black'
                     : 'opacity-75'
