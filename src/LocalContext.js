@@ -13,6 +13,8 @@ function LocalContextProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
 
+  const [cart, setCart] = useState([]);
+
   const settings = {
     customPaging: function (i) {
       return (
@@ -128,6 +130,8 @@ function LocalContextProvider({ children }) {
         setProducts,
         orders,
         setOrders,
+        cart,
+        setCart,
         settings,
       }}
     >

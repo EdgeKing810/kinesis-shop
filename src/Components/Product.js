@@ -23,9 +23,15 @@ export default function Product() {
 
   const alert = useAlert();
 
-  const { UPLOADSURL, loggedInUser, products, users, settings } = useContext(
-    LocalContext
-  );
+  const {
+    UPLOADSURL,
+    loggedInUser,
+    products,
+    users,
+    cart,
+    setCart,
+    settings,
+  } = useContext(LocalContext);
 
   const currentProduct = productID
     ? products.find((p) => p.productID.toString() === productID.toString())
@@ -317,22 +323,61 @@ export default function Product() {
 
               {currentProduct.amount && currentProduct.amount > 0 && (
                 <div className="w-full flex justify-center py-2">
-                  <button
-                    className={`p-2 bg-black border-2 border-black sm:text-lg text-sm text-gray-200 w-11/12 ${
-                      amount > 0
-                        ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black'
-                        : 'opacity-75'
-                    }`}
-                    onClick={() => {
-                      if (amount > 0) {
-                        console.log('Adding to cart');
-                      } else {
-                        alert.error('Select a quantity first.');
-                      }
-                    }}
-                  >
-                    Add to cart
-                  </button>
+                  {loggedInUser.uid && loggedInUser.uid !== undefined ? (
+                    <button
+                      className={`p-2 bg-black border-2 border-black sm:text-lg text-sm text-gray-200 w-11/12 ${
+                        amount > 0
+                          ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black'
+                          : 'opacity-75'
+                      }`}
+                      onClick={() => {
+                        if (amount > 0) {
+                          setCart((prev) => {
+                            if (
+                              prev
+                                .map((p) => p.productID)
+                                .includes(currentProduct.productID)
+                            ) {
+                              return prev.map((p) => {
+                                if (p.productID === currentProduct.productID) {
+                                  return {
+                                    uid: currentProduct.uid,
+                                    productID: currentProduct.productID,
+                                    amount: amount,
+                                  };
+                                } else {
+                                  return p;
+                                }
+                              });
+                            } else {
+                              return [
+                                ...prev,
+                                {
+                                  uid: currentProduct.uid,
+                                  productID: currentProduct.productID,
+                                  amount: amount,
+                                },
+                              ];
+                            }
+                          });
+                          history.push('/cart');
+                        } else {
+                          alert.error('Select a quantity first.');
+                        }
+                      }}
+                    >
+                      Add to cart
+                    </button>
+                  ) : (
+                    <button
+                      className={`p-2 border-2 border-red-300 sm:text-lg text-sm text-gray-800 w-11/12 bg-red-300`}
+                      onClick={() => {
+                        history.push('/sign-in');
+                      }}
+                    >
+                      Sign in first
+                    </button>
+                  )}
                 </div>
               )}
             </div>

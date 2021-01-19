@@ -30,6 +30,7 @@ export default function Login() {
     if (loggedInUser.uid && loggedInUser.uid !== undefined) {
       history.push('/');
     }
+    // eslint-disable-next-line
   }, []);
 
   const submitForm = (e) => {
