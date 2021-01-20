@@ -140,13 +140,24 @@ export default function Product() {
   };
 
   const addOrder = () => {
+    let d = new Date();
+    const timestamp = new Date(
+      d.getUTCFullYear(),
+      d.getUTCMonth(),
+      d.getUTCDate(),
+      d.getUTCHours(),
+      d.getUTCMinutes(),
+      d.getUTCSeconds()
+    );
+
     const data = {
       uid: loggedInUser.uid,
       orderID: v4(),
-      date: new Date(),
+      date: timestamp,
       products: [...cart],
-      is_paid: { status: false, date: new Date() },
-      is_delivered: { status: false, date: new Date() },
+      is_paid: { status: false, date: timestamp },
+      is_delivered: { status: false, date: timestamp },
+      tax_percentage: 1.15,
     };
 
     axios
@@ -155,7 +166,7 @@ export default function Product() {
       })
       .then((res) => {
         if (res.data.error === 0) {
-          setOrders((prev) => [...prev, data]);
+          setOrders((prev) => [data, ...prev]);
 
           alert.success('Order Successfully Placed!');
 
