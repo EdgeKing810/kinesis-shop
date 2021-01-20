@@ -148,6 +148,27 @@ export default function Profile() {
       .then((res) => {
         if (res.data.error === 0) {
           alert.success('Successfully Updated!');
+
+          setUsers((prev) =>
+            prev.map((user) => {
+              if (user.uid === loggedInUser.uid) {
+                let updatedUser = { ...user };
+
+                user.address = {
+                  country: data.country,
+                  state: data.state,
+                  city: data.city,
+                  address: data.address,
+                  postal_code: data.postal_code,
+                  number: data.number,
+                };
+
+                return updatedUser;
+              } else {
+                return user;
+              }
+            })
+          );
         } else {
           console.log(res.data);
         }
@@ -703,7 +724,7 @@ export default function Profile() {
           products.find((p) => p.productID === product.productID).price
         ) * product.amount
     );
-    let totalPrice = prices.reduce((a, b) => a + b, 0) * order.taxPercentage;
+    let totalPrice = prices.reduce((a, b) => a + b, 0) * order.tax_percentage;
     orderPrices.push(totalPrice);
   });
 
@@ -748,12 +769,16 @@ export default function Profile() {
                     </button>
                   </td>
                   <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/3">
-                    {convertDate(or.date)}
+                    {convertDate(or.date).split(' ').slice(0, 5).join(' ')}
                   </td>
                   <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/10 font-bold">
                     {or.is_paid.status ? (
                       <span className="text-green-500">
-                        On {convertDate(or.is_paid.date)}
+                        On{' '}
+                        {convertDate(or.is_paid.date)
+                          .split(' ')
+                          .slice(0, 5)
+                          .join(' ')}
                       </span>
                     ) : (
                       <span className="text-red-500">No</span>
@@ -762,7 +787,11 @@ export default function Profile() {
                   <td className="sm:text-sm text-xs p-2 text-gray-800 border w-1/10 font-bold">
                     {or.is_delivered.status ? (
                       <span className="text-green-500">
-                        On {convertDate(or.is_delivered.date)}
+                        On{' '}
+                        {convertDate(or.is_delivered.date)
+                          .split(' ')
+                          .slice(0, 5)
+                          .join(' ')}
                       </span>
                     ) : (
                       <span className="text-red-500">No</span>
