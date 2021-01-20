@@ -51,12 +51,9 @@ export default function Product() {
 
     setTimeout(() => {
       if (currentProduct === undefined) {
-        setError('Product not found');
-        setColor('red');
-      } else {
         setError('');
       }
-    }, 3000);
+    }, 1000);
     // eslint-disable-next-line
   }, []);
 

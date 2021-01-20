@@ -14,6 +14,7 @@ function LocalContextProvider({ children }) {
   const [orders, setOrders] = useState([]);
 
   const [cart, setCart] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
 
   const settings = {
     customPaging: function (i) {
@@ -76,6 +77,7 @@ function LocalContextProvider({ children }) {
         .then((res) => {
           if (res.data.error === 0) {
             setUsers(res.data.users);
+            setCurrentUser(res.data.users.find((u) => u.uid === uid));
           }
         });
 
@@ -132,6 +134,8 @@ function LocalContextProvider({ children }) {
         setOrders,
         cart,
         setCart,
+        currentUser,
+        setCurrentUser,
         settings,
       }}
     >

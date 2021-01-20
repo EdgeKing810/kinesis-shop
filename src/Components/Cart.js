@@ -17,19 +17,14 @@ export default function Product() {
     loggedInUser,
     products,
     setProducts,
-    users,
     setUsers,
+    currentUser,
     cart,
     setCart,
     setOrders,
   } = useContext(LocalContext);
 
   const alert = useAlert();
-
-  const currentUser =
-    loggedInUser.uid && loggedInUser.uid !== undefined
-      ? users.find((u) => u.uid === loggedInUser.uid)
-      : {};
 
   const [country, setCountry] = useState(
     currentUser && currentUser.address ? currentUser.address.country : ''

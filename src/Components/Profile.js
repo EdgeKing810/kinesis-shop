@@ -26,17 +26,13 @@ export default function Profile() {
     setProducts,
     users,
     setUsers,
+    currentUser,
     orders,
     setOrders,
     setCart,
   } = useContext(LocalContext);
 
   const alert = useAlert();
-
-  const currentUser =
-    loggedInUser.uid && loggedInUser.uid !== undefined
-      ? users.find((u) => u.uid === loggedInUser.uid)
-      : {};
 
   let userProducts = [];
 
@@ -78,7 +74,7 @@ export default function Profile() {
   const [preferredPayment] = useState(
     currentUser && currentUser.preferred_payment
       ? currentUser.preferred_payment
-      : 'PAYPAL'
+      : 'PayPal'
   );
 
   const convertDate = (date) => {

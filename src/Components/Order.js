@@ -281,6 +281,7 @@ export default function Order() {
           <div
             className={`w-full text-left sm:text-base text-sm text-gray-800 ${
               currentUser.is_admin &&
+              currentOrder.is_paid.status &&
               !currentOrder.is_delivered.status &&
               'border-b-2'
             } border-gray-500 px-2 py-2 flex`}
@@ -303,20 +304,22 @@ export default function Order() {
                 : 0}
             </div>
           </div>
-          {currentUser.is_admin && !currentOrder.is_delivered.status && (
-            <div className="my-4 flex items-center justify-center">
-              <button
-                className={`p-2 bg-black border-2 border-black sm:text-lg uppercase text-sm text-gray-200 w-11/12 ${
-                  cartProducts && cartProducts.length > 0
-                    ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black'
-                    : 'opacity-75'
-                }`}
-                onClick={() => markDelivered()}
-              >
-                Mark as Delivered
-              </button>
-            </div>
-          )}
+          {currentUser.is_admin &&
+            currentOrder.is_paid.status &&
+            !currentOrder.is_delivered.status && (
+              <div className="my-4 flex items-center justify-center">
+                <button
+                  className={`p-2 bg-black border-2 border-black sm:text-lg uppercase text-sm text-gray-200 w-11/12 ${
+                    cartProducts && cartProducts.length > 0
+                      ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black'
+                      : 'opacity-75'
+                  }`}
+                  onClick={() => markDelivered()}
+                >
+                  Mark as Delivered
+                </button>
+              </div>
+            )}
         </div>
       </div>
     </div>

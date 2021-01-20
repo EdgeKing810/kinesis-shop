@@ -14,6 +14,7 @@ export default function Login() {
     setUsers,
     setProducts,
     setOrders,
+    setCurrentUser,
   } = useContext(LocalContext);
 
   const [username, setUsername] = useState('');
@@ -100,6 +101,9 @@ export default function Login() {
           .then((resp) => {
             if (resp.data.error === 0) {
               setUsers(resp.data.users);
+              setCurrentUser(
+                resp.data.users.find((u) => u.uid === res.data.uid)
+              );
             }
           });
 
