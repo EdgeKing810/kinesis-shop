@@ -848,7 +848,9 @@ export default function Profile() {
                   selected === 'orders'
                     ? 'bg-blue-300'
                     : 'hover:bg-blue-200 focus:bg-blue-200'
-                } text-base border-b-2 border-gray-500`}
+                } text-base ${
+                  currentUser.is_admin && 'border-b-2'
+                } border-gray-500`}
                 onClick={() => setSelected('orders')}
               >
                 Orders
