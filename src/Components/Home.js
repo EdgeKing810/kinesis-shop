@@ -69,7 +69,7 @@ export default function Home() {
               Latest Products
             </div>
           )}
-          {/* <div className="w-11/12 mt-2 flex sm:flex-wrap sm:flex-row flex-col justify-between supergrid items-center"> */}
+
           {products && products.length > 0 && (
             <div className="grid sm:grid-cols-5 grid-cols-1 sm:gap-4 w-11/12 mb-4">
               {products.slice(0, limit).map((pr, i) => (
@@ -87,7 +87,7 @@ export default function Home() {
                     />
                   </div>
 
-                  <div className="w-full h-1/3 flex flex-col justify-between mt-2">
+                  <div className="w-full h-1/3 flex flex-col justify-end mt-2 pb-4">
                     <div className="w-full text-left font-bold text-base text-gray-700 tracking-wide">
                       {pr.name}
                     </div>
@@ -99,10 +99,12 @@ export default function Home() {
                         edit={false}
                         value={
                           pr.reviews && pr.reviews !== undefined
-                            ? pr.reviews
-                                .map((r) => parseFloat(r.rating))
-                                .reduce((acc, rat) => acc + rat, 0) /
-                              pr.reviews.length
+                            ? parseInt(
+                                pr.reviews
+                                  .map((r) => parseFloat(r.rating))
+                                  .reduce((acc, rat) => acc + rat, 0) /
+                                  pr.reviews.length
+                              )
                             : 0
                         }
                         activeColor="#ffd700"

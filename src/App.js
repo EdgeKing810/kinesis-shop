@@ -8,6 +8,7 @@ import Login from './Components/Login';
 import Profile from './Components/Profile';
 import Cart from './Components/Cart';
 import Order from './Components/Order';
+import Search from './Components/Search';
 
 export default function App() {
   return (
@@ -39,6 +40,10 @@ export default function App() {
 
             <Route exact path="/order/:orderID">
               <Order />
+            </Route>
+
+            <Route exact path="/search/:searchInput">
+              <Search />
             </Route>
 
             <Route render={() => <Redirect to="/" />} />

@@ -20,7 +20,13 @@ export default function NavBar() {
           Kinesis Shop
         </button>
 
-        <div className="sm:h-full flex sm:flex-row flex-col items-center sm:w-auto w-full">
+        <form
+          className="sm:h-full flex sm:flex-row flex-col items-center sm:w-auto w-full"
+          onSubmit={(e) => {
+            e.preventDefault();
+            history.push(`/search/${search}`);
+          }}
+        >
           <input
             title="Search Products"
             className="sm:p-5 p-2 bg-gray-200 sm:h-full mr-2 sm:text-lg text-sm sm:w-auto w-5/6 placeholder-gray-500 text-gray-800"
@@ -35,10 +41,11 @@ export default function NavBar() {
                 ? 'hover:bg-green-300 focus:bg-green-300 hover:text-green-900 focus:text-green-900'
                 : 'opacity-75'
             } text-green-400 tracking-wide sm:text-lg text-sm sm:mt-0 mt-2`}
+            type="submit"
           >
             Search
           </button>
-        </div>
+        </form>
       </div>
 
       <div className="flex h-full sm:w-auto w-5/6 items-center sm:justify-auto justify-between sm:my-0 mb-2 mt-4">
