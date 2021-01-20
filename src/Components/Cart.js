@@ -283,21 +283,21 @@ export default function Product() {
             <div className="w-full text-left mb-2 sm:text-2xl text-lg tracking-wider text-gray-700 font-bold uppercase mt-2 mx-2">
               Subtotal {`(${cartProducts.length})`} items
             </div>
-            <div className="w-full text-left sm:text-base text-sm text-gray-800 border-b-2 border-gray-500 px-2 pb-2">
-              $
-              {cartProducts && cartProducts.length > 0
-                ? cartProducts
-                    .map(
-                      (product) =>
-                        parseFloat(product.price) *
-                        parseFloat(
-                          cart.find((c) => c.productID === product.productID)
-                            .amount
-                        )
-                    )
-                    .reduce((a, b) => a + b, 0) * 1.15
-                : 0}
-            </div>
+            {cartProducts && cartProducts.length > 0 && (
+              <div className="w-full text-left sm:text-base text-sm text-gray-800 border-b-2 border-gray-500 px-2 pb-2">
+                $
+                {cartProducts
+                  .map(
+                    (product) =>
+                      parseFloat(product.price) *
+                      parseFloat(
+                        cart.find((c) => c.productID === product.productID)
+                          .amount
+                      )
+                  )
+                  .reduce((a, b) => a + b, 0) * 1.15}
+              </div>
+            )}
             <div className="my-4 flex items-center justify-center">
               <button
                 className={`p-2 bg-black border-2 border-black sm:text-lg uppercase text-sm text-gray-200 w-11/12 ${
