@@ -7,6 +7,7 @@ import Product from './Components/Product';
 import Login from './Components/Login';
 import Profile from './Components/Profile';
 import Cart from './Components/Cart';
+import Order from './Components/Order';
 
 export default function App() {
   return (
@@ -34,6 +35,10 @@ export default function App() {
 
             <Route exact path="/cart">
               <Cart />
+            </Route>
+
+            <Route exact path="/order/:orderID">
+              <Order />
             </Route>
 
             <Route render={() => <Redirect to="/" />} />

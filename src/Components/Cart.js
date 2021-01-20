@@ -155,7 +155,7 @@ export default function Product() {
       orderID: v4(),
       date: timestamp,
       products: [...cart],
-      is_paid: { status: false, date: timestamp },
+      is_paid: { status: true, date: timestamp },
       is_delivered: { status: false, date: timestamp },
       tax_percentage: 1.15,
     };
@@ -169,6 +169,20 @@ export default function Product() {
           setOrders((prev) => [data, ...prev]);
 
           alert.success('Order Successfully Placed!');
+
+          axios
+            .post(
+              `${APIURL}/api/shop/order/update`,
+              { ...data, isPaid: 'true' },
+              {
+                headers: { Authorization: `Bearer ${loggedInUser.jwt}` },
+              }
+            )
+            .then((resp) => {
+              if (resp.data.error !== 0) {
+                console.log(resp.data);
+              }
+            });
 
           setProducts((prev) =>
             prev.map((product) => {
@@ -398,10 +412,10 @@ export default function Product() {
                   : 'opacity-75'
               } sm:w-1/3 w-full bg-black text-gray-100 mt-4 sm:p-4 p-2 sm:text-lg text-sm`}
               onClick={() =>
-                checkUpdateInfo()
-                  ? updateInfo()
-                  : postalCode.length < 5
+                postalCode.length < 5
                   ? alert.error('Postal Code is invalid!')
+                  : checkUpdateInfo()
+                  ? updateInfo()
                   : alert.error('No fields should be empty!')
               }
             >

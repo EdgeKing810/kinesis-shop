@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import axios from 'axios';
 import Slider from 'react-slick';
 import Select from 'react-select';
 import ReactStars from 'react-rating-stars-component';
 import { useAlert } from 'react-alert';
+import { v4 } from 'uuid';
 
 import { LocalContext } from '../LocalContext';
 
@@ -24,11 +26,12 @@ export default function Product() {
   const alert = useAlert();
 
   const {
+    APIURL,
     UPLOADSURL,
     loggedInUser,
     products,
+    setProducts,
     users,
-    cart,
     setCart,
     settings,
   } = useContext(LocalContext);
@@ -47,17 +50,24 @@ export default function Product() {
     }
 
     setTimeout(() => {
-      setError('Product not found');
-      setColor('red');
-    }, 1000);
+      if (currentProduct === undefined) {
+        setError('Product not found');
+        setColor('red');
+      } else {
+        setError('');
+      }
+    }, 3000);
     // eslint-disable-next-line
   }, []);
 
-  const options = Array.from({ length: currentProduct.amount }, (_, i) =>
-    (i + 1).toString()
-  ).map((e) => {
-    return { value: e, label: e };
-  });
+  const options =
+    currentProduct &&
+    currentProduct !== undefined &&
+    Array.from({ length: currentProduct.amount }, (_, i) =>
+      (i + 1).toString()
+    ).map((e) => {
+      return { value: e, label: e };
+    });
 
   const convertDate = (date) => {
     const oldDate = new Date(date);
@@ -71,6 +81,57 @@ export default function Product() {
         oldDate.getSeconds()
       )
     ).toString();
+  };
+
+  const submitReview = () => {
+    let d = new Date();
+    const timestamp = new Date(
+      d.getUTCFullYear(),
+      d.getUTCMonth(),
+      d.getUTCDate(),
+      d.getUTCHours(),
+      d.getUTCMinutes(),
+      d.getUTCSeconds()
+    );
+
+    const data = {
+      uid: loggedInUser.uid,
+      productID: productID,
+      reviewID: v4(),
+      review: review,
+      rating: rating,
+      date: timestamp,
+    };
+
+    axios
+      .post(`${APIURL}/api/shop/product/review/create`, data, {
+        headers: { Authorization: `Bearer ${loggedInUser.jwt}` },
+      })
+      .then((res) => {
+        if (res.data.error === 0) {
+          setProducts((prev) =>
+            prev.map((product) => {
+              if (product.productID === productID) {
+                let updatedProduct = { ...product };
+                updatedProduct.reviews =
+                  updatedProduct.reviews.length > 0
+                    ? [{ ...data }, ...updatedProduct.reviews]
+                    : [{ ...data }];
+                return updatedProduct;
+              } else {
+                return product;
+              }
+            })
+          );
+
+          alert.success('Review successfully posted!');
+
+          setReview('');
+          setRating(0);
+        } else {
+          console.log(res.data);
+        }
+      });
   };
 
   return (
@@ -180,7 +241,7 @@ export default function Product() {
                 Write a customer review
               </div>
 
-              {loggedInUser.uid && loggedInUser.uidyy !== undefined ? (
+              {loggedInUser.uid && loggedInUser.uid !== undefined ? (
                 <div className="w-full flex flex-col">
                   <div className="w-full text-left sm:text-lg text-base text-gray-600 tracking-wide font-bold mt-2">
                     Rating
@@ -196,7 +257,7 @@ export default function Product() {
                     />
                   </div>
 
-                  <div className="w-full text-left sm:text-lg text-base text-gray-600 tracking-wide font-bold mt-4">
+                  <div className="w-full text-left sm:text-lg text-base text-gray-600 tracking-wide font-bold">
                     Comment
                   </div>
                   <textarea
@@ -208,13 +269,15 @@ export default function Product() {
                   />
 
                   <button
-                    className={`sm:w-1/3 sm:mb-8 sm:mt-0 mt-2 uppercase border-gray-800 ${
+                    className={`sm:w-1/3 sm:mb-8 mt-2 uppercase border-gray-800 ${
                       review.length > 0
                         ? 'hover:bg-gray-100 focus:bg-gray-100 hover:text-gray-800 focus:text-gray-800'
                         : 'opacity-50'
                     } border-2 border-gray-800 text-gray-300 bg-gray-800 sm:text-lg text-base p-2`}
                     onClick={() => {
-                      if (review.length > 0) console.log('Submit Review');
+                      rating > 0 && rating <= 5
+                        ? submitReview()
+                        : alert.error('Rating has to be between 1 - 5');
                     }}
                   >
                     Submit
@@ -222,7 +285,7 @@ export default function Product() {
                 </div>
               ) : (
                 <div className="py-2 bg-blue-300 text-gray-900 sm:text-lg text-base mt-4 text-center opacity-75">
-                  Please sign it to write a review
+                  Please sign in to write a review
                 </div>
               )}
             </div>
@@ -307,7 +370,7 @@ export default function Product() {
                 </div>
               </div>
 
-              {currentProduct.amount && currentProduct.amount > 0 && (
+              {currentProduct.amount && currentProduct.amount > 0 ? (
                 <div className="w-full flex items-center border-b-2 border-gray-500 py-2">
                   <div className="sm:w-1/2 w-1/3 font-bold text-gray-700 ml-2">
                     Quantity:
@@ -319,9 +382,11 @@ export default function Product() {
                     />
                   </div>
                 </div>
+              ) : (
+                ''
               )}
 
-              {currentProduct.amount && currentProduct.amount > 0 && (
+              {currentProduct.amount && currentProduct.amount > 0 ? (
                 <div className="w-full flex justify-center py-2">
                   {loggedInUser.uid && loggedInUser.uid !== undefined ? (
                     <button
@@ -379,6 +444,8 @@ export default function Product() {
                     </button>
                   )}
                 </div>
+              ) : (
+                ''
               )}
             </div>
           </div>

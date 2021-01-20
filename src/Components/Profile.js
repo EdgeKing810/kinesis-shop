@@ -426,10 +426,10 @@ export default function Profile() {
             : 'opacity-75'
         } sm:w-1/3 w-5/6 bg-black text-gray-100 sm:mt-4 mt-2 sm:p-4 p-2 sm:text-lg text-sm`}
         onClick={() =>
-          checkUpdateInfo()
-            ? updateInfo()
-            : postalCode.length < 5
+          postalCode.length < 5
             ? alert.error('Postal Code is invalid!')
+            : checkUpdateInfo()
+            ? updateInfo()
             : alert.error('No fields should be empty!')
         }
       >
