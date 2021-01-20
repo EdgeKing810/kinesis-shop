@@ -337,7 +337,10 @@ export default function Product() {
 
               <div className="bg-gray-300 pt-1"></div>
 
-              <div className="text-gray-700 tracking-wide sm:text-sm text-xs mt-2">
+              <div
+                className="text-gray-700 sm:text-sm text-xs mt-2"
+                style={{ whiteSpace: 'pre-line' }}
+              >
                 {currentProduct.description}
               </div>
             </div>
