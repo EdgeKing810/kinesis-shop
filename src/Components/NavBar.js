@@ -11,7 +11,7 @@ export default function NavBar() {
   const history = useHistory();
 
   return (
-    <div className="w-full sm:px-20 sm:py-8 bg-gray-800 flex sm:flex-row flex-col justify-between items-center">
+    <div className="w-full sm:px-24 sm:py-8 bg-gray-800 flex sm:flex-row flex-col justify-between items-center">
       <div className="flex sm:flex-row flex-col h-full items-center sm:w-auto w-full">
         <button
           className="uppercase text-gray-300 font-open tracking-wide sm:text-2xl text-xl font-bold sm:mr-8 sm:my-0 my-4"
